@@ -1,0 +1,204 @@
+// Chalu — Prisma schema (SQLite in-sandbox; provider-swap to postgresql for Supabase)
+// Prices stored as Int (whole rupees). GST computed in app, rounded to nearest rupee.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Restaurant {
+  id                 String   @id @default(cuid())
+  name               String
+  nameHi             String
+  tagline            String
+  address            String
+  phone              String
+  gstRate            Float    @default(5) // % — split CGST/SGST
+  reservationsEnabled Boolean @default(true) // owner-side feature flag: offer table selection in the walk-up scan flow
+  createdAt          DateTime @default(now())
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String?
+  name         String
+  role         String   @default("customer") // customer | staff | kitchen | owner
+  phone        String?
+  googleSub    String?  // Google OAuth stub
+  createdAt    DateTime @default(now())
+  orders       Order[]
+  shifts       StaffShift[]
+  assignments  TableAssignment[]
+  alertsFrom   StaffAlert[]
+}
+
+model TableToken {
+  id         String   @id @default(cuid())
+  code       String   @unique // e.g. "T5", "Q12"
+  label      String
+  seats      Int      @default(4)
+  status     String   @default("empty") // empty | occupied | reserved | cleaning
+  section    String?  // optional floor section (e.g. "Window", "Patio") for staff assignment
+  qrToken    String   @unique // for QR ordering
+  createdAt  DateTime @default(now())
+  orders     Order[]
+  queueEntry QueueEntry[]
+  assignments TableAssignment[]
+  alerts      StaffAlert[]
+}
+
+model MenuItem {
+  id           String   @id @default(cuid())
+  name         String
+  nameHi       String
+  description  String
+  descriptionHi String
+  category     String // starters | mains | breads | rice | desserts | beverages
+  price        Int     // rupees
+  veg          String   @default("veg") // veg | nonveg | egg
+  spice        Int      @default(1) // 0..3
+  available    Boolean  @default(true)
+  bestseller   Boolean  @default(false)
+  prepMinutes  Int      @default(12)
+  eightySixAt  DateTime?
+  ingredients  MenuItemIngredient[]
+  orderItems   OrderItem[]
+  createdAt    DateTime @default(now())
+}
+
+model Ingredient {
+  id           String   @id @default(cuid())
+  name         String
+  nameHi       String
+  stockLevel   Int      @default(50) // arbitrary units
+  lowThreshold Int      @default(10)
+  available    Boolean  @default(true)
+  unit         String   @default("units")
+  dishes       MenuItemIngredient[]
+  createdAt    DateTime @default(now())
+}
+
+model MenuItemIngredient {
+  menuItemId  String
+  ingredientId String
+  quantity     Int     @default(1)
+  menuItem     MenuItem  @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@id([menuItemId, ingredientId])
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  kotNumber   Int      @unique
+  status      String   @default("NEW") // NEW | COOKING | READY | SERVED | CLOSED
+  tableId     String?
+  customerId  String?
+  customerName String?
+  partySize   Int      @default(1)
+  notes       String?
+  subtotal    Int      @default(0)
+  cgst        Int      @default(0)
+  sgst        Int      @default(0)
+  total       Int      @default(0)
+  paid        Boolean  @default(false)
+  paymentMode String?  // cash | upi | card
+  createdAt   DateTime @default(now())
+  cookingAt   DateTime?
+  readyAt     DateTime?
+  servedAt    DateTime?
+  closedAt    DateTime?
+  table       TableToken? @relation(fields: [tableId], references: [id])
+  customer    User?       @relation(fields: [customerId], references: [id])
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  orderId    String
+  menuItemId String
+  name       String
+  nameHi     String
+  price      Int
+  qty        Int
+  veg        String
+  spice      Int
+  notes      String?
+  status     String   @default("NEW") // NEW | COOKING | READY | SERVED | VOID
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model QueueEntry {
+  id         String   @id @default(cuid())
+  name       String
+  phone      String?
+  partySize  Int      @default(1)
+  status     String   @default("WAITING") // WAITING | SEATED | LEFT
+  position   Int
+  quotedWait Int      // minutes
+  tableId    String?
+  createdAt  DateTime @default(now())
+  seatedAt   DateTime?
+  table      TableToken? @relation(fields: [tableId], references: [id])
+}
+
+model StaffShift {
+  id        String   @id @default(cuid())
+  userId    String
+  role      String   // kitchen | staff | owner
+  start     DateTime
+  end       DateTime?
+  station   String?  // grill | tandoor | pass | floor
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+// Denormalized daily sales aggregate for analytics + forecasting
+model SalesDaily {
+  id        String   @id @default(cuid())
+  date      String   @unique // YYYY-MM-DD
+  revenue   Int
+  orders    Int
+  guests    Int
+  createdAt DateTime @default(now())
+}
+
+// Staff coordination — which staff member is currently responsible for which table/section
+model TableAssignment {
+  id         String   @id @default(cuid())
+  tableId    String
+  userId     String   // the assigned staff member
+  section    String?  // optional section label (mirrors table.section for quick filtering)
+  active     Boolean  @default(true)
+  assignedAt DateTime @default(now())
+  table      TableToken @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tableId, userId, active])
+}
+
+// Lightweight real-time alerts between roles (kitchen→waiter "ready", waiter→kitchen "table needs water", breach alerts, etc.)
+model StaffAlert {
+  id         String   @id @default(cuid())
+  fromUserId String?
+  fromName   String
+  toUserId   String?  // null = broadcast to a role
+  toRole     String   // staff | kitchen | owner
+  tableId    String?
+  type       String   // ready | water | bill | help | breach
+  message    String
+  resolved   Boolean  @default(false)
+  resolvedAt DateTime?
+  resolvedBy String?
+  createdAt  DateTime @default(now())
+  fromUser   User?    @relation(fields: [fromUserId], references: [id], onDelete: SetNull)
+  table      TableToken? @relation(fields: [tableId], references: [id], onDelete: SetNull)
+}
+

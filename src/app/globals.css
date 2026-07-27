@@ -1,0 +1,235 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  CHALU — brutalist bones, beautiful skin.
+  Thick ink borders as structure, hard geometric color blocks, hard-edged offset
+  shadows on primary actions (press-collapse tactile click), carried through the
+  warm chili/marigold/curry-leaf palette and refined Sora/Jakarta typography.
+  Selective border-as-structure (hierarchy, not uniform). The KOT ticket carries
+  real structural weight; secondary/ambient surfaces stay softer. Never reads as
+  generic concrete-and-black brutalism or a borrowed neo-brutalist SaaS template.
+*/
+
+@theme inline {
+  /* === Palette (warm, multi-tonal — never desaturates to concrete) === */
+  --color-paper:      #FBF7EF;  /* warm porcelain background */
+  --color-ink:        #2A2119;  /* warm deep charcoal — text + structural borders, never pure black */
+  --color-chili:      #D6472E;  /* primary bold accent — CTAs, primary actions, "ready" energy */
+  --color-marigold:   #F0A63A;  /* secondary accent — highlights, bestseller, "cooking" state */
+  --color-curry-leaf: #3E7A56;  /* success / veg / "ready" state */
+  --color-clay:       #8B6F5C;  /* secondary text, dividers, quiet UI chrome */
+
+  /* Derived surface tints */
+  --color-paper-deep: #F3ECDD;
+  --color-paper-dim:  #EAE0CC;
+  --color-ink-soft:   #4A3D31;
+
+  /* === Legacy aliases (kept so existing bg-chalk/text-turmeric/etc. auto-map) === */
+  --color-chalk:      var(--color-paper);
+  --color-chalk-deep: var(--color-paper-deep);
+  --color-chalk-dim:  var(--color-paper-dim);
+  --color-turmeric:   var(--color-marigold);
+  --color-curry:      var(--color-curry-leaf);
+  --color-steel:      var(--color-clay);
+
+  /* === Fonts (var names stable) === */
+  --font-display:  var(--font-sora), var(--font-jakarta);
+  --font-headline: var(--font-sora), var(--font-jakarta);
+  --font-body:     var(--font-jakarta), var(--font-noto-deva);
+  --font-deva:     var(--font-noto-deva);
+  --font-mono:     var(--font-jetbrains-mono);
+
+  /* === shadcn semantic tokens remapped === */
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-paper);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-paper);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-chili);
+  --color-primary-foreground: #fffdf8;
+  --color-secondary: var(--color-paper-deep);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-paper-deep);
+  --color-muted-foreground: var(--color-clay);
+  --color-accent: var(--color-marigold);
+  --color-accent-foreground: var(--color-ink);
+  --color-destructive: var(--color-chili);
+  --color-destructive-foreground: #fffdf8;
+  --color-border: var(--color-ink);
+  --color-input: var(--color-ink);
+  --color-ring: var(--color-chili);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+}
+
+:root {
+  --radius: 10px;
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+  --card: var(--color-paper);
+  --card-foreground: var(--color-ink);
+  --popover: var(--color-paper);
+  --popover-foreground: var(--color-ink);
+  --primary: var(--color-chili);
+  --primary-foreground: #fffdf8;
+  --secondary: var(--color-paper-deep);
+  --secondary-foreground: var(--color-ink);
+  --muted: var(--color-paper-deep);
+  --muted-foreground: var(--color-clay);
+  --accent: var(--color-marigold);
+  --accent-foreground: var(--color-ink);
+  --destructive: var(--color-chili);
+  --destructive-foreground: #fffdf8;
+  --border: var(--color-ink);
+  --input: var(--color-ink);
+  --ring: var(--color-chili);
+  --chart-1: var(--color-chili);
+  --chart-2: var(--color-marigold);
+  --chart-3: var(--color-curry-leaf);
+  --chart-4: var(--color-clay);
+  --chart-5: var(--color-ink);
+  --sidebar: var(--color-paper);
+  --sidebar-foreground: var(--color-ink);
+  --sidebar-primary: var(--color-chili);
+  --sidebar-primary-foreground: #fffdf8;
+  --sidebar-accent: var(--color-paper-deep);
+  --sidebar-accent-foreground: var(--color-ink);
+  --sidebar-border: var(--color-ink);
+  --sidebar-ring: var(--color-chili);
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    /* very subtle warm grain */
+    background-image: radial-gradient(rgba(42,33,25,0.02) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  ::selection { background: var(--color-marigold); color: var(--color-ink); }
+  /* visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 3px solid var(--color-marigold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
+}
+
+@layer components {
+  /* === Signature KOT ticket: 2px ink border + hard offset shadow = real structural weight === */
+  .kot-card {
+    background: var(--color-paper);
+    border: 2px solid var(--color-ink);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--color-ink);
+  }
+  .kot-card-sm {
+    border: 2px solid var(--color-ink);
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--color-ink);
+  }
+  /* === Secondary/ambient surface: softer, lighter border — hierarchy, not uniform === */
+  .surface-soft {
+    background: var(--color-paper);
+    border: 1px solid var(--color-paper-dim);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(42,33,25,0.04), 0 6px 16px -6px rgba(42,33,25,0.10);
+  }
+  /* Fine elegant perforated edge */
+  .perforation {
+    height: 1px;
+    background-image: linear-gradient(90deg, var(--color-ink) 50%, transparent 50%);
+    background-size: 7px 1px;
+    background-repeat: repeat-x;
+    background-position: center;
+    opacity: 0.35;
+  }
+  .perforation-solid {
+    border-top: 1.5px dashed var(--color-ink);
+    opacity: 0.4;
+  }
+  /* Status pill — clean, color-coded, with a structural 1.5px ink border */
+  .stamp {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 0.3em 0.75em;
+    line-height: 1;
+    background: transparent;
+    border: 1.5px solid var(--color-ink);
+  }
+  /* Hard-shadow press: collapses the offset shadow on :active — tactile, satisfying, on primary actions */
+  .press {
+    transition: transform 90ms cubic-bezier(.2,.7,.3,1), box-shadow 90ms ease, background-color 140ms ease;
+  }
+  .press:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 var(--color-ink) !important;
+  }
+  /* Soft press for secondary controls (no hard shadow to collapse) */
+  .press-soft {
+    transition: transform 140ms cubic-bezier(.2,.7,.3,1), background-color 140ms ease, box-shadow 140ms ease;
+  }
+  .press-soft:active {
+    transform: scale(0.97);
+  }
+  /* Hard-edged color block — for section headers, status chrome */
+  .ink-block {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+}
+
+@layer utilities {
+  /* The one allowed warm spotlight on hero */
+  .spotlight {
+    background:
+      radial-gradient(110% 80% at 50% -8%, rgba(240,166,58,0.20) 0%, rgba(251,247,239,0) 55%),
+      radial-gradient(90% 60% at 92% 8%, rgba(214,71,46,0.10) 0%, rgba(251,247,239,0) 50%);
+  }
+  .text-stencil { font-family: var(--font-display); letter-spacing: -0.01em; }
+  .deva { font-family: var(--font-deva); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  /* role accent helpers */
+  .accent-customer  { --role-accent: var(--color-chili); }
+  .accent-kitchen   { --role-accent: var(--color-marigold); }
+  .accent-waiter    { --role-accent: var(--color-chili); }
+  .accent-owner     { --role-accent: var(--color-curry-leaf); }
+  /* hard offset shadow utility */
+  .shadow-hard { box-shadow: 4px 4px 0 var(--color-ink); }
+  .shadow-hard-sm { box-shadow: 3px 3px 0 var(--color-ink); }
+}
+
+/* Refined scrollbar */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: var(--color-clay); border-radius: 999px; border: 2px solid var(--color-paper); }
+*::-webkit-scrollbar-thumb:hover { background: var(--color-ink); }
+
+/* Reduced motion — respect it everywhere */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

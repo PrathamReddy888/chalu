@@ -1,0 +1,12 @@
+{
+  "name": "Chalu — Live Restaurant Ops",
+  "short_name": "Chalu",
+  "description": "Live kitchen ops — no gap between the menu and the pan.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F6F1E4",
+  "theme_color": "#1B1B18",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

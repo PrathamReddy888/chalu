@@ -66,8 +66,8 @@ export function Landing() {
     setTable(tb.id);
     setPersona("customer");
     setView("menu");
-    toast.success(locale === "en" ? `Table ${tb.code} selected` : `Table ${tb.code} selected`, {
-      description: locale === "en" ? "Happy to have you — here's today's live menu." : "Here's today's live menu.",
+    toast.success("Table " + tb.code + " selected", {
+      description: "Here is today's live menu.",
     });
   };
 
@@ -89,15 +89,13 @@ export function Landing() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 font-display text-base font-bold uppercase tracking-wide">
                   <QrCode className="h-4 w-4" style={{ color: "var(--color-chili)" }} />
-                  {locale === "en" ? "Scan to order" : "Scan to order"}
+                  Scan to order
                 </div>
                 <p className="mt-1.5 max-w-[280px] text-sm text-ink/75">
-                  {locale === "en"
-                    ? "Point your phone camera here to open Chalu and see today's live menu. No app install."
-                    : "Point your phone camera here to open Chalu and see today's live menu. No app install."}
+                  Point your phone camera here to open Chalu and see today's live menu. No app install.
                 </p>
                 <p className="mt-2 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-clay">
-                  <Smartphone className="h-3 w-3" /> {locale === "en" ? "or pick a table below" : "or pick a table below"}
+                  <Smartphone className="h-3 w-3" /> or pick a table below
                 </p>
               </div>
             </div>
@@ -110,9 +108,9 @@ export function Landing() {
                 <UtensilsCrossed className="h-5 w-5" />
               </span>
               <span className="font-display text-lg font-bold leading-tight">{t("hero_cta_order", locale)}</span>
-              <span className="text-xs text-white/80">{locale === "en" ? "Browse today's live menu, order, track your ticket." : "Browse today's live menu, order, track your ticket."}</span>
+              <span className="text-xs text-white/80">Browse today's live menu, order, track your ticket.</span>
               <span className="mt-1 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-white/70">
-                <ArrowRight className="h-3 w-3" /> {locale === "en" ? "no login needed" : "no login needed"}
+                <ArrowRight className="h-3 w-3" /> no login needed
               </span>
             </button>
 
@@ -123,10 +121,10 @@ export function Landing() {
               <span className="grid h-11 w-11 place-items-center rounded-[10px] border-2 border-paper/30 bg-paper/10">
                 <LogIn className="h-5 w-5" />
               </span>
-              <span className="font-display text-lg font-bold leading-tight">{locale === "en" ? "Restaurant access" : "Restaurant access"}</span>
-              <span className="text-xs text-paper/70">{locale === "en" ? "Kitchen, waiter, or owner - log in to your shift." : "Kitchen, waiter, or owner - log in to your shift."}</span>
+              <span className="font-display text-lg font-bold leading-tight">Restaurant access</span>
+              <span className="text-xs text-paper/70">Kitchen, waiter, or owner - log in to your shift.</span>
               <span className="mt-1 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-paper/50">
-                <LogIn className="h-3 w-3" /> {locale === "en" ? "staff & owners" : "staff & owners"}
+                <LogIn className="h-3 w-3" /> staff &amp; owners
               </span>
             </button>
           </div>
@@ -134,22 +132,20 @@ export function Landing() {
           {reservationsEnabled ? (
             <div className="w-full rounded-[12px] border-2 border-ink bg-paper p-4 shadow-[3px_3px_0_var(--color-ink)]">
               <div className="mb-3 flex items-center justify-between">
-                <h2 className="font-display text-lg font-bold">{locale === "en" ? "Pick a table" : "Pick a table"}</h2>
+                <h2 className="font-display text-lg font-bold">Pick a table</h2>
                 {!tablesLoaded && <span className="font-mono text-[10px] uppercase tracking-wider text-clay">...</span>}
                 {tablesLoaded && (
                   <span className="font-mono text-[10px] uppercase tracking-wider text-clay">
-                    {freeTables.length} {locale === "en" ? "free" : "free"}
+                    {freeTables.length} free
                   </span>
                 )}
               </div>
               {!tablesLoaded ? (
                 <button onClick={loadTables} className="press inline-flex h-9 items-center gap-1.5 rounded-[8px] border-2 border-ink bg-paper-deep px-3 font-display text-xs font-semibold uppercase tracking-wide">
-                  <MapPin className="h-3.5 w-3.5" /> {locale === "en" ? "Show free tables" : "Show free tables"}
+                  <MapPin className="h-3.5 w-3.5" /> Show free tables
                 </button>
               ) : freeTables.length === 0 ? (
-                <p className="font-mono text-[10px] uppercase tracking-wider text-clay">
-                  {locale === "en" ? "All tables are taken right now." : "All tables are taken right now."}
-                </p>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-clay">All tables are taken right now.</p>
               ) : (
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {freeTables.map((tb) => (
@@ -160,7 +156,7 @@ export function Landing() {
                       onMouseLeave={() => setSelectedTable(null)}
                       className={cn(
                         "press flex flex-col items-start gap-0.5 rounded-[8px] border-2 px-2.5 py-2 text-left",
-                        selectedTable === tb.id ? "border-ink bg-ink text-paper" : "border-ink/20 bg-paper hover:border-ink/50 hover:bg-paper-deep",
+                        selectedTable === tb.id ? "border-ink bg-ink text-paper" : "border-ink/20 bg-paper hover:border-ink/50 hover:bg-paper-deep"
                       )}
                     >
                       <span className="font-display text-base font-bold leading-none">{tb.code}</span>
@@ -174,9 +170,7 @@ export function Landing() {
                   ))}
                 </div>
               )}
-              <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-clay">
-                {locale === "en" ? "Tap a free table to start your order there." : "Tap a free table to start your order there."}
-              </p>
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-clay">Tap a free table to start your order there.</p>
             </div>
           ) : (
             <PressButton variant="chili" size="lg" onClick={enterCustomer}>
@@ -189,7 +183,7 @@ export function Landing() {
           <div className="mt-8">
             <TicketCard className="overflow-hidden">
               <div className="flex items-center justify-between gap-3 border-b-2 border-ink bg-paper-deep/70 px-4 py-2.5 rounded-t-[10px]">
-                <h3 className="font-display font-bold text-sm">{locale === "en" ? "Off the pass right now" : "Off the pass right now"}</h3>
+                <h3 className="font-display font-bold text-sm">Off the pass right now</h3>
                 <StatusPill tone="eighty-six" size="xs">{eightySixed.length} items</StatusPill>
               </div>
               <div className="flex flex-wrap gap-3 p-4">
@@ -198,7 +192,7 @@ export function Landing() {
                     <VegIndicator isVeg={m.veg as "veg" | "nonveg" | "egg"} />
                     <div className="min-w-0">
                       <span className="font-display text-sm font-semibold line-through">{locale === "hi" ? m.nameHi : m.name}</span>
-                      <div className="font-mono text-[10px] uppercase tracking-wider text-chili">86'd</div>
+                      <div className="font-mono text-[10px] uppercase tracking-wider text-chili">86&apos;d</div>
                     </div>
                   </div>
                 ))}
@@ -210,12 +204,12 @@ export function Landing() {
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid gap-4 md:grid-cols-3">
-          <Pillar n="01" tone="chili" title={locale === "en" ? "Live 86'd sync" : "Live 86'd sync"}
-            body={locale === "en" ? "Kitchen marks an ingredient out and it greys out on every customer screen in under a second, with an AI-suggested substitute offered in its place." : "Kitchen marks an ingredient out and it greys out on every customer screen in under a second, with an AI-suggested substitute offered in its place."} />
-          <Pillar n="02" tone="marigold" title={locale === "en" ? "KOT-first pipeline" : "KOT-first pipeline"}
-            body={locale === "en" ? "Every order becomes a Kitchen Order Ticket moving NEW to COOKING to READY to SERVED, visible to both kitchen and customer." : "Every order becomes a Kitchen Order Ticket moving NEW to COOKING to READY to SERVED, visible to both kitchen and customer."} />
-          <Pillar n="03" tone="curry-leaf" title={locale === "en" ? "Honest wait times" : "Honest wait times"}
-            body={locale === "en" ? "Live, honest wait estimates that reflect real table turns and Chalu works to shorten them: breach-sorted tickets, load-balanced staff, alerts before a table breaches its wait." : "Live, honest wait estimates that reflect real table turns and Chalu works to shorten them: breach-sorted tickets, load-balanced staff, alerts before a table breaches its wait."} />
+          <Pillar n="01" tone="chili" title="Live 86&apos;d sync"
+            body="Kitchen marks an ingredient out and it greys out on every customer screen in under a second, with an AI-suggested substitute offered in its place." />
+          <Pillar n="02" tone="marigold" title="KOT-first pipeline"
+            body="Every order becomes a Kitchen Order Ticket moving NEW to COOKING to READY to SERVED, visible to both kitchen and customer." />
+          <Pillar n="03" tone="curry-leaf" title="Honest wait times"
+            body="Live, honest wait estimates that reflect real table turns and Chalu works to shorten them: breach-sorted tickets, load-balanced staff, alerts before a table breaches its wait." />
         </div>
       </section>
 
@@ -226,9 +220,7 @@ export function Landing() {
             <span className="mt-2 block" style={{ color: "var(--color-chili)" }}>{t("hero_title_2", locale)}</span>
           </h1>
           <p className="mt-5 max-w-2xl font-body text-base text-ink/80 sm:text-lg">
-            {locale === "en"
-              ? "Chalu is the live-operations layer for a single restaurant. The moment the kitchen marks a dish 86'd, it greys out on every customer's screen and an AI suggests a substitute on the spot."
-              : "Chalu is the live-operations layer for a single restaurant. The moment the kitchen marks a dish 86'd, it greys out on every customer's screen and an AI suggests a substitute on the spot."}
+            Chalu is the live-operations layer for a single restaurant. The moment the kitchen marks a dish 86&apos;d, it greys out on every customer&apos;s screen and an AI suggests a substitute on the spot.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <PressButton variant="chili" size="lg" onClick={enterCustomer}>
@@ -240,23 +232,21 @@ export function Landing() {
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <div className="mb-5">
-          <h2 className="font-display text-2xl sm:text-3xl">{locale === "en" ? "Run the floor" : "Run the floor"}</h2>
-          <p className="mt-1 font-mono text-xs uppercase tracking-wider text-clay">
-            {locale === "en" ? "three roles, three apps - pick yours" : "three roles, three apps - pick yours"}
-          </p>
+          <h2 className="font-display text-2xl sm:text-3xl">Run the floor</h2>
+          <p className="mt-1 font-mono text-xs uppercase tracking-wider text-clay">three roles, three apps - pick yours</p>
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           <AppEntry persona="kitchen" icon={ChefHat}
-            title={locale === "en" ? "I'm kitchen staff" : "I'm kitchen staff"}
-            desc={locale === "en" ? "Live KOT queue + 86'd control. Login required." : "Live KOT queue + 86'd control. Login required."}
+            title="I&apos;m kitchen staff"
+            desc="Live KOT queue + 86&apos;d control. Login required."
             cta={t("hero_cta_kitchen", locale)} onClick={enterKitchen} accent="marigold" />
           <AppEntry persona="waiter" icon={ConciergeBell}
-            title={locale === "en" ? "I'm a waiter" : "I'm a waiter"}
-            desc={locale === "en" ? "My tables, live status, ready alerts. Login required." : "My tables, live status, ready alerts. Login required."}
-            cta={locale === "en" ? "My floor" : "My floor"} onClick={enterWaiter} accent="chili" />
+            title="I&apos;m a waiter"
+            desc="My tables, live status, ready alerts. Login required."
+            cta="My floor" onClick={enterWaiter} accent="chili" />
           <AppEntry persona="owner" icon={Crown}
-            title={locale === "en" ? "I run this place" : "I run this place"}
-            desc={locale === "en" ? "Today at a glance: sales, tables, stock. Login required." : "Today at a glance: sales, tables, stock. Login required."}
+            title="I run this place"
+            desc="Today at a glance: sales, tables, stock. Login required."
             cta={t("hero_cta_admin", locale)} onClick={enterOwner} accent="curry-leaf" />
         </div>
       </section>

@@ -16,9 +16,7 @@ This is **not a Zomato/Swiggy clone**. It is a narrow, end-to-end operational we
 
 ## Hosted Application
 
-The app is live and publicly reachable via the **Preview Panel** (right side of the dev interface). Click **"Open in New Tab"** above the preview for a full-window view. There is **no login wall blocking the customer experience** — the live menu, the 86'd ticker, and the AI assistant are all reachable as a guest.
-
-> Note: in this build environment the app runs on a sandbox gateway (single exposed port). The code is structured for a one-step migration to Vercel + Supabase — see `DECISIONS.md` D1. The GitHub repo should be pushed by the team before final submission.
+At vercel
 
 ## Demo Login Credentials
 

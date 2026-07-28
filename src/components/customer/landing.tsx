@@ -8,7 +8,7 @@ import { t } from "@/lib/i18n";
 import { useMenu } from "@/hooks/use-menu";
 import { useRestaurant } from "@/hooks/use-restaurant";
 import { api } from "@/lib/api-client";
-import { Flame, UtensilsCrossed, ChefHat, Crown, ArrowRight, QrCode, Smartphone, MapPin, Users, ConciergeBell } from "lucide-react";
+import { Flame, UtensilsCrossed, ChefHat, Crown, ArrowRight, QrCode, Smartphone, MapPin, Users, ConciergeBell, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -92,8 +92,8 @@ export function Landing() {
         </div>
 
         <div className="mt-5 flex flex-col gap-5">
-          {/* Scan-to-order (QR) + See-menu — side by side, filling the space */}
-          <div className="grid items-stretch gap-4 sm:grid-cols-[1.4fr_1fr]">
+          {/* Scan-to-order (QR) + See-menu + Restaurant Access — 3 cards, side by side */}
+          <div className="grid items-stretch gap-4 sm:grid-cols-[1.4fr_1fr_1fr]">
             <div className="flex flex-col gap-4 rounded-[12px] border-2 border-ink bg-paper p-5 shadow-[4px_4px_0_var(--color-ink)] sm:flex-row sm:items-center">
               <LiveQR value={origin} size={156} />
               <div className="min-w-0 flex-1">
@@ -112,7 +112,7 @@ export function Landing() {
               </div>
             </div>
 
-            {/* See-menu CTA — fills the space beside the QR, same height, visual harmony */}
+            {/* See-menu CTA — customer browse, no login needed */}
             <button
               onClick={enterCustomer}
               className="press flex flex-col items-start justify-center gap-2 rounded-[12px] border-2 border-ink bg-chili p-5 text-left text-white shadow-[4px_4px_0_var(--color-ink)] transition hover:shadow-[5px_5px_0_var(--color-ink)]"
@@ -124,6 +124,21 @@ export function Landing() {
               <span className="text-xs text-white/80">{locale === "en" ? "Browse today's live menu, order, track your ticket." : "आज का लाइव मेनू देखें, ऑर्डर करें, टिकट ट्रैक करें।"}</span>
               <span className="mt-1 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-white/70">
                 <ArrowRight className="h-3 w-3" /> {locale === "en" ? "no login needed" : "लॉगिन जरूरी नहीं"}
+              </span>
+            </button>
+
+            {/* Restaurant Access — staff/owner login */}
+            <button
+              onClick={() => setView("login")}
+              className="press flex flex-col items-start justify-center gap-2 rounded-[12px] border-2 border-ink bg-ink p-5 text-left text-paper shadow-[4px_4px_0_var(--color-ink)] transition hover:shadow-[5px_5px_0_var(--color-ink)]"
+            >
+              <span className="grid h-11 w-11 place-items-center rounded-[10px] border-2 border-paper/30 bg-paper/10">
+                <LogIn className="h-5 w-5" />
+              </span>
+              <span className="font-display text-lg font-bold leading-tight">{locale === "en" ? "Restaurant access" : "रेस्तरां लॉगिन"}</span>
+              <span className="text-xs text-paper/70">{locale === "en" ? "Kitchen, waiter, or owner — log in to your shift." : "रसोई, वेटर, या मालिक — अपनी शिफ्ट में लॉगिन करें।"}</span>
+              <span className="mt-1 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-wider text-paper/50">
+                <LogIn className="h-3 w-3" /> {locale === "en" ? "staff & owners" : "स्टाफ व मालिक"}
               </span>
             </button>
           </div>

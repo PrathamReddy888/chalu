@@ -16,7 +16,7 @@ This is **not a Zomato/Swiggy clone**. It is a narrow, end-to-end operational we
 
 ## Hosted Application
 
-At vercel
+At vercel chalu-git-main-8056.vercel.app
 
 ## Demo Login Credentials
 
@@ -105,7 +105,7 @@ Google OAuth is wired end-to-end via NextAuth v4, You can sign in with a google 
 - **Substitute suggestion** (`/api/ai/substitute`): LLM is given the 86'd dish + the full live available menu and returns 2-3 JSON substitutes with reasons. Falls back to category+veg matching if JSON parse fails.
 - **Demand forecasting** (`/api/forecast`): 7-day order history is aggregated into per-dish averages × 1.1 growth buffer; the LLM writes a human-readable morning prep list from the projected numbers.
 - **Customer chat** (`/api/ai/chat`): the LLM is grounded with the **live** menu (available items + the 86'd list) as system context and instructed to answer concisely in Hinglish, never inventing dishes.
-- The LLM is the `z-ai-web-dev-sdk` (functionally equivalent to Gemini; chosen because it is the available model in this build environment — see `DECISIONS.md` D1).
+- The LLM is the `gemini-1.5-flash`.
 
 ---
 
@@ -176,7 +176,7 @@ prisma/
 
 ## Pitch deck
 
-The pitch deck will be submitted separately in the organizer's required PPT template (provided on Day 3), as instructed. It is **not** fabricated here.
+The pitch deck will be submitted separately in the organizer's required PPT template (provided on Day 3), as instructed.
 
 ---
 

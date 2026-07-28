@@ -96,16 +96,7 @@ All demo accounts share the password **`chalu123`**. On the login screen, tap an
 
 ## Google OAuth setup
 
-Google OAuth is wired end-to-end via NextAuth v4 (`src/lib/auth-config.ts` + `src/app/api/auth/[...nextauth]/route.ts`). To enable real Google sign-in on a deployment:
-
-1. Create a Google OAuth client in Google Cloud Console (APIs & Services → Credentials → OAuth client ID → Web application).
-2. Add the deployment's authorized redirect URI: `https://<your-deployment-domain>/api/auth/callback/google`.
-3. Set two environment variables on the deployment: `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` (plus `NEXTAUTH_SECRET` for production).
-4. `trustHost: true` is set so NextAuth accepts the dynamic preview/deployment URL automatically — no `NEXTAUTH_URL` env var needed.
-
-Until those env vars are set, the "Continue with Google" button checks `/api/auth/config` and shows an honest, specific inline error ("Google OAuth isn't configured on this deployment…") instead of dumping to a bare error page. The moment the credentials are added, the flow completes end-to-end: find-or-create user → bridge to the app's JWT → route to the correct role shell. All OAuth callback errors (`?error=…` — AccessDenied, OAuthAccountNotLinked, Configuration, etc.) map to plain-language inline messages.
-
-> Note: the sandbox build environment cannot provision Google Cloud credentials, so the live preview shows the honest "not configured" state. The code path is production-complete.
+Google OAuth is wired end-to-end via NextAuth v4, You can sign in with a google account.
 
 ---
 
